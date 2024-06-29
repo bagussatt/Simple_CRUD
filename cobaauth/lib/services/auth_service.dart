@@ -28,24 +28,20 @@ class AuthService {
     }
   }
 
-  Future<bool> register(UserModel user) async {
-    try {
-      final response = await client.post(
-        Uri.parse('http://your_api/register'), // Replace with your registration endpoint
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(user.toJson()),
-      );
+  Future<Token> register(UserModel user) async {
+    final response = await client.post(
+      Uri.parse('http://10.0.2.2:3000/auth/register'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(user.toJson()),
+    );
 
-      if (response.statusCode == 200) {
-        return true; // Registration successful
-      } else {
-        return false; // Registration failed
-      }
-    } catch (e) {
-      print('Error registering user: $e');
-      return false; // Registration failed
+    if (response.statusCode == 201) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      return Token.fromJson(data);
+    } else {
+      throw Exception('Failed to register');
     }
   }
 }

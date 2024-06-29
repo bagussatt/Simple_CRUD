@@ -5,7 +5,6 @@ const db = require('../config/database');
 
 const router = express.Router();
 
-// Register
 router.post('/register', (req, res) => {
   const { username, password } = req.body;
   
@@ -21,7 +20,7 @@ router.post('/register', (req, res) => {
   const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
   db.query(query, [username, hashedPassword], (err, results) => {
     if (err) {
-      console.error('Error registering user:', err);
+      console.error('Error registering user:', err); // Log error here
       return res.status(500).send('Failed to register user');
     }
 
@@ -34,7 +33,6 @@ router.post('/register', (req, res) => {
     res.status(201).send({ auth: true, token });
   });
 });
-
 // Login
 router.post('/login', (req, res) => {
   const { username, password } = req.body;

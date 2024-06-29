@@ -1,11 +1,11 @@
-import 'package:cobaauth/models/user_model.dart';
-import 'package:cobaauth/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:cobaauth/controllers/auth_controller.dart';
+import 'package:cobaauth/models/user_model.dart';
 
 class RegisterPage extends StatefulWidget {
-  final AuthService authService;
+  final AuthController authController;
 
-  RegisterPage({Key? key, required this.authService}) : super(key: key);
+  RegisterPage({Key? key, required this.authController}) : super(key: key);
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -22,18 +22,11 @@ class _RegisterPageState extends State<RegisterPage> {
         password: _passwordController.text,
       );
 
-      bool success = await widget.authService.register(user);
-
-      if (success) {
-        _showConfirmationDialog();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to register')),
-        );
-      }
+      await widget.authController.register(user);
+      _showConfirmationDialog();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        SnackBar(content: Text('Failed to register: $e')),
       );
     }
   }

@@ -1,3 +1,4 @@
+import 'package:cobaauth/controllers/auth_controller.dart';
 import 'package:cobaauth/repository/auth_repository.dart';
 import 'package:cobaauth/screen/register_page.dart';
 import 'package:cobaauth/services/auth_service.dart';
@@ -19,7 +20,9 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _loginController = LoginController(
-        authRepository: AuthRepositoryImpl(client: http.Client()));
+        authRepository: AuthRepositoryImpl(
+            client: http.Client(),
+            authService: AuthService(client: http.Client())));
   }
 
   @override
@@ -58,11 +61,14 @@ class _LoginPageState extends State<LoginPage> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => RegisterPage(
-                            authService: AuthService(client: http.Client()),
-                          )),
+                    builder: (context) => RegisterPage(
+                        authController: AuthController(
+                            repository: AuthRepositoryImpl(
+                                client: http.Client(),
+                                authService:
+                                    AuthService(client: http.Client())))),
+                  ),
                 );
-
                 if (result != null && result is String) {
                   // If registration was successful, update the username field
                   _usernameController.text = result;
