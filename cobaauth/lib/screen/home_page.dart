@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchItems() async {
     final response = await http.get(
-      Uri.parse('http://localhost:5000/items'),
+      Uri.parse('http://10.0.2.2:3000/items'),
       headers: {'Authorization': widget.token},
     );
 
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _addItem(String name, String description) async {
     final response = await http.post(
-      Uri.parse('http://localhost:5000/items'),
+      Uri.parse('http://10.0.2.2:3000/items'),
       headers: {
         'Authorization': widget.token,
         'Content-Type': 'application/json; charset=UTF-8',
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _updateItem(int id, String name, String description) async {
     final response = await http.put(
-      Uri.parse('http://localhost:5000/items/$id'),
+      Uri.parse('http://10.0.2.2:3000/items/$id'),
       headers: {
         'Authorization': widget.token,
         'Content-Type': 'application/json; charset=UTF-8',
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _deleteItem(int id) async {
     final response = await http.delete(
-      Uri.parse('http://localhost:5000/items/$id'),
+      Uri.parse('http://10.0.2.2:3000/items/$id'),
       headers: {'Authorization': widget.token},
     );
 

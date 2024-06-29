@@ -69,4 +69,10 @@ router.post('/login', (req, res) => {
   });
 });
 
+// Logout
+router.post('/logout', (req, res) => {
+  // In a stateless authentication system, client handles token removal
+  res.status(200).send({ auth: false, token: null });
+});
+
 module.exports = router;

@@ -1,8 +1,12 @@
+import 'package:cobaauth/models/user_model.dart';
+import 'package:cobaauth/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class RegisterPage extends StatefulWidget {
+  final AuthService authService;
+
+  RegisterPage({Key? key, required this.authService}) : super(key: key);
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -12,22 +16,24 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _register() async {
-    final response = await http.post(
-      Uri.parse('http://localhost:5000/auth/register'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'username': _usernameController.text,
-        'password': _passwordController.text,
-      }),
-    );
+    try {
+      UserModel user = UserModel(
+        username: _usernameController.text,
+        password: _passwordController.text,
+      );
 
-    if (response.statusCode == 201) {
-      _showConfirmationDialog();
-    } else {
+      bool success = await widget.authService.register(user);
+
+      if (success) {
+        _showConfirmationDialog();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to register')),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to register')),
+        SnackBar(content: Text('Error: $e')),
       );
     }
   }
